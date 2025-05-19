@@ -1,9 +1,9 @@
 
 # Axur Internship Technical Evaluation
 
-## 🕸️ Web Scraping with Python & BeautifulSoup
+## 🕸️ Web Scraping with Python & BeautifulSoup + API Integration
 
-This project demonstrates a simple web scraping task using Python and the BeautifulSoup library. It was developed as part of the Axur internship technical evaluation.
+This project performs web scraping on a given page to extract images, and sends the first image to a machine learning model API for inference. The result is then automatically submitted to a verification endpoint.
 
 ---
 
@@ -16,9 +16,7 @@ This project demonstrates a simple web scraping task using Python and the Beauti
 
 ## ⚙️ Setup Instructions
 
-### 1. Create a virtual environment
-
-Run this command in the root directory of the project:
+### 1. Clone the project and create a virtual environment
 
 ```bash
 python -m venv venv
@@ -43,29 +41,41 @@ On **Windows (PowerShell)**:
 
 ### 3. Install dependencies
 
-With the virtual environment active, run:
-
 ```bash
-pip install beautifulsoup4 requests
+pip install beautifulsoup4 requests python-dotenv
+```
+
+### 4. Set your API token
+
+Create a `.env` file in the root of the project and add your token:
+
+```
+AXUR_API_TOKEN=your_api_token_here
 ```
 
 ---
 
 ## 🚀 Running the Script
 
-Make sure you're inside the virtual environment. Then run:
+With the virtual environment activated and the `.env` file set, run:
 
 ```bash
 python main.py
 ```
 
-The script will scrape the target web page and save the embedded image as a local file named `extracted_image.jpg`.
+This will:
+
+1. Scrape all `<img>` elements from the specified page.
+2. Save them in the `extracted_images/` directory.
+3. Send the first image (base64) to the model `microsoft-florence-2-large` using the prompt `<DETAILED_CAPTION>`.
+4. Submit the model's raw response to the validation endpoint.
 
 ---
 
 ## 📄 Notes
 
-- All scraping was done using the `requests` and `beautifulsoup4` libraries.
-- The image is embedded in base64 format and is extracted directly from the `img` tag.
+- The image sent to the model is encoded as base64 and embedded in the OpenAI-style payload.
+- All requests follow the expected headers and structure for authorization and content-type.
+- Make sure the token is valid; otherwise, the script will raise an authentication error.
 
 ---
